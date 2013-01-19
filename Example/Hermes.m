@@ -96,7 +96,7 @@ static NSString *DEFAULT_HERMES_FONT = @"Arial";
 static NSInteger _btnHeight = 40;
 static NSInteger _marginBottom = 10;
 static NSInteger BUTTON_MARGIN = 10;
-static float _messageHeight = 130;
+static NSInteger BACKGROUND_TAG = 989;
 static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 
 
@@ -120,6 +120,7 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
         _hermesButtonColor = DEFAULT_BUTTON_COLOR;
         _hermesFont = [UIFont fontWithName:DEFAULT_HERMES_FONT size:DEFAULT_HERMES_FONT_SIZE];
         _message = message;
+        [self setMessageLabel:_message];
         
         // set all of our private vars with dynamically so buttons and spacing is relative to frame
         [self setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
@@ -148,31 +149,35 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
         NSLog(@"make alert");
     // Now set and Calc the label size
     
-    UIView *alertBox = [[UIView alloc] initWithFrame:CGRectMake(_marginLeft, 110, _hermesWidth, _messageHeight+(_numberOfButtonRows*(_btnHeight+_marginBottom)))];
+    float alertBoxOriginX = (screen.size.width - _hermesWidth)/2;
+    float alertBoxOriginY = (screen.size.height - _messageHeight)/2;
     
-    _alertBox = alertBox;
+    _alertBox = [[UIView alloc] initWithFrame:CGRectMake(alertBoxOriginX, alertBoxOriginY, _hermesWidth, _messageHeight+_marginTop + _marginBottom + (_numberOfButtonRows*(_btnHeight+_marginBottom)))];
     
+    // Add in our Message Label
+    [_alertBox addSubview:_messageLabel];
     
-    
-    UILabel * messageLabel = [ self setMessageLabel:_message];
-    CGRect modalFrameForMessageSize = alertBox.frame;
-    // Set the new height to have the label height plus margins top and bottom plus the height of the buttons and button margin.
-    modalFrameForMessageSize.size.height = messageLabel.bounds.size.height +_marginBottom +_marginTop+ (_numberOfButtonRows*(_btnHeight+_marginBottom));
-    modalFrameForMessageSize.origin.y = (screen.size.height/2) - (modalFrameForMessageSize.size.height/2);
-    // Update the modal frame
-    alertBox.frame = modalFrameForMessageSize;
+
     
     // Add in our backgound for the alert box 
     UIImage *background = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pw-login-bg" ofType:@"png"]];
     UIImageView *bkgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,_alertBox.frame.size.width, _alertBox.frame.size.height)];
     
+    if(HERMES_ROUNDED_CORNERS){
+        [[bkgImageView layer] setCornerRadius:HERMES_ROUNDED_CORNER_RADIUS];
+        [[bkgImageView layer] setMasksToBounds:YES];
+        [[_alertBox layer] setCornerRadius:HERMES_ROUNDED_CORNER_RADIUS];
+    }
     // set the image and make it grow to fill the alert view
     [bkgImageView setImage:background];
+    bkgImageView.tag =BACKGROUND_TAG;
     [bkgImageView setContentMode:UIViewContentModeScaleToFill];
     
     // Add the background to the view and send it to the back
     [_alertBox addSubview:bkgImageView];
     [_alertBox sendSubviewToBack:bkgImageView];
+    
+
         
 
     
@@ -191,6 +196,8 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 // SetButton take a title and type to create a single, double or half button.
 - (void) addActionButton:(NSString*)title position:(HermesButtonPlaces)position action:(SEL)buttonAction delegate:(id)delegate
 {
+    _numberOfButtonRows += 1;
+    [self updateHermesShoeSize];
     CGRect frame = [self getButtonFrame:position];
     // INIT the button in the right location.
     
@@ -202,12 +209,16 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     
     [modalBtn addTarget:delegate action:buttonAction forControlEvents: UIControlEventTouchUpInside];
     [modalBtn setTag:position];
+
     [_alertBox addSubview:modalBtn];
     
 }
 
 - (void) addDismissButton:(NSString*)title position:(HermesButtonPlaces)position
 {
+    _numberOfButtonRows += 1;
+    [self updateHermesShoeSize];
+    
     CGRect frame = [self getButtonFrame:position];
     // INIT the button in the right location.
     HermesButton *modalBtn = [
@@ -218,7 +229,21 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     
     [modalBtn addTarget:self action:@selector(dismissModal) forControlEvents: UIControlEventTouchUpInside];
     [modalBtn setTag:position];
+
     [_alertBox addSubview:modalBtn];
+}
+
+-(void) updateHermesShoeSize
+{
+    CGRect newHermesShoeSize = _alertBox.frame;
+    newHermesShoeSize.size.height += _marginBottom + _btnHeight;
+    newHermesShoeSize.origin.y -= (_marginBottom + _btnHeight)/2;
+    
+    //Update our alert box.
+    _alertBox.frame = newHermesShoeSize;
+    
+    // Now Update our background image;
+    [_alertBox viewWithTag:BACKGROUND_TAG].frame = CGRectMake(0,0,_alertBox.frame.size.width, _alertBox.frame.size.height);
 }
 
 // Put our buttons in place, ie left right top button
@@ -243,9 +268,9 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 }
 // set Message get an NSString and creates a UILabel.
 // The Label is set dynamically with margins and set UILabelHeight
-- (UILabel*) setMessageLabel:(NSString *)message
+- (void) setMessageLabel:(NSString *)message
 {
-    float msgWidth = _alertBox.bounds.size.width-(_marginLeft*2);
+    float msgWidth = _hermesWidth-(_marginLeft*2);
     CGSize labelsize=[message sizeWithFont:[UIFont fontWithName:_hermesFont.fontName size:(18.0)] constrainedToSize:CGSizeMake(msgWidth, 1000.0) lineBreakMode:UILineBreakModeWordWrap];
     // Calculating the height of the message allows the label to be exact and aligned top
     UILabel *msg = [[UILabel alloc] initWithFrame:CGRectMake(_marginLeft, _marginTop, msgWidth, labelsize.height)];
@@ -255,19 +280,13 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     } else {
         msg.textAlignment =  UITextAlignmentCenter;
     }
-    
-    
-
-    
-
     msg.textColor = [UIColor whiteColor];
     msg.backgroundColor = [UIColor clearColor];
     msg.font = _hermesFont;
     msg.numberOfLines = 0;
     msg.text = message;
-    NSLog(@"message is %@", message);
-    [_alertBox addSubview:msg];
-    return msg;
+    _messageLabel = msg;
+    _messageHeight = _messageLabel.frame.size.height;
 }
 
 // dismissModal removes the Hermes view from the superview.
@@ -359,6 +378,10 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     [line moveToPoint:CGPointMake(0, 0)];
     [line addLineToPoint:CGPointMake(_alertBox.bounds.size.width, 0)];
     [line stroke];
+    
+    
+    
+    
 }
 
 @end

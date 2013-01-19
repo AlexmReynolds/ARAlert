@@ -12,7 +12,15 @@
 
 
 #ifndef HERMES_CUSTOM_BUTTON_CLASS
-    #define HERMES_CUSTOM_BUTTON_CLASS = 0
+    #define HERMES_CUSTOM_BUTTON_CLASS 0
+#endif
+
+#ifndef HERMES_ROUNDED_CORNERS
+    #define HERMES_ROUNDED_CORNERS 1
+#endif
+
+#ifndef HERMES_ROUNDED_CORNER_RADIUS
+    #define HERMES_ROUNDED_CORNER_RADIUS 10
 #endif
 
 /*
@@ -35,8 +43,8 @@ typedef enum{
 }HermesButtonPlaces;
 
 typedef enum{
-    HermesRedButton = 1,
-    HermesBlueButton,
+    HermesBlueButton = 1,
+    HermesRedButton,
     HermesBlackButton
 }HermesButtonColor;
 
@@ -48,8 +56,10 @@ typedef enum{
     int _halfBtnWidth;
     int _fullBtnWidth;
     int _hermesWidth;
+    float _messageHeight;
     HermesButtonPlaces btnPosition;
     UIView *_alertBox;
+    UILabel *_messageLabel;
     UIFont *_hermesFont;
     int _numberOfButtonRows;
     NSString *_message;

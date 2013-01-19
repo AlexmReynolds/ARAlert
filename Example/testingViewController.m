@@ -34,7 +34,8 @@
 
 - (IBAction)testtt:(id)sender {
     Hermes *message = [[Hermes alloc] initWithMessage:@"test \n this is a message \n so deal"];
-    [message fadeInAndOut:10.0];
+    [message addDismissButton:@"close" position:HermesButtonBottom];
+    [message show];
 
 }
 @end
