@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface testingViewController : UIViewController
+#import "Hermes.h"
+@interface testingViewController : UIViewController{
+    Hermes *_hermesView;
+}
 - (IBAction)testtt:(id)sender;
 
 @end

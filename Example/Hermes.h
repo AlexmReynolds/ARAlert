@@ -36,10 +36,8 @@
 @class Hermes;
 
 typedef enum{
-    HermesButtonLeft = 1,
-    HermesButtonRight,
-    HermesButtonTop,
-    HermesButtonBottom
+    HermesButtonHalf = 1,
+    HermesButtonFull
 }HermesButtonPlaces;
 
 typedef enum{
@@ -57,6 +55,8 @@ typedef enum{
     int _fullBtnWidth;
     int _hermesWidth;
     float _messageHeight;
+    BOOL _buttonRowCompleted;
+    HermesButtonPlaces _lastButtonType;
     HermesButtonPlaces btnPosition;
     UIView *_alertBox;
     UILabel *_messageLabel;

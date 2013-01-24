@@ -89,13 +89,13 @@
 @implementation Hermes
 
 static const float FULL_BUTTON_WIDTH = 0.9;
-static const float HALF_BUTTON_WIDTH = 0.4;
+static const float HALF_BUTTON_WIDTH = 0.425;
 static const NSInteger DEFAULT_BUTTON_COLOR = 1;
 static float DEFAULT_HERMES_FONT_SIZE = 16;
 static NSString *DEFAULT_HERMES_FONT = @"Arial";
 static NSInteger _btnHeight = 40;
 static NSInteger _marginBottom = 10;
-static NSInteger BUTTON_MARGIN = 10;
+static float BUTTON_MARGIN = 0.05;
 static NSInteger BACKGROUND_TAG = 989;
 static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 
@@ -115,11 +115,14 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
         _halfBtnWidth = _hermesWidth * HALF_BUTTON_WIDTH;
         _fullBtnWidth = _hermesWidth * FULL_BUTTON_WIDTH;
         _marginTop = BUTTON_MARGIN;
-        _marginLeft = BUTTON_MARGIN;
-        _marginRight = BUTTON_MARGIN;
+        _marginLeft = _hermesWidth*BUTTON_MARGIN;
+        _marginRight = _hermesWidth*BUTTON_MARGIN;
         _hermesButtonColor = DEFAULT_BUTTON_COLOR;
         _hermesFont = [UIFont fontWithName:DEFAULT_HERMES_FONT size:DEFAULT_HERMES_FONT_SIZE];
         _message = message;
+        _buttonRowCompleted = YES;
+        
+        // We need to set the message so we can get the height of the message uilabel to then build the modal
         [self setMessageLabel:_message];
         
         // set all of our private vars with dynamically so buttons and spacing is relative to frame
@@ -196,8 +199,6 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 // SetButton take a title and type to create a single, double or half button.
 - (void) addActionButton:(NSString*)title position:(HermesButtonPlaces)position action:(SEL)buttonAction delegate:(id)delegate
 {
-    _numberOfButtonRows += 1;
-    [self updateHermesShoeSize];
     CGRect frame = [self getButtonFrame:position];
     // INIT the button in the right location.
     
@@ -211,13 +212,13 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     [modalBtn setTag:position];
 
     [_alertBox addSubview:modalBtn];
+    [self updateHermesShoeSize];
     
 }
 
 - (void) addDismissButton:(NSString*)title position:(HermesButtonPlaces)position
 {
-    _numberOfButtonRows += 1;
-    [self updateHermesShoeSize];
+
     
     CGRect frame = [self getButtonFrame:position];
     // INIT the button in the right location.
@@ -231,13 +232,15 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
     [modalBtn setTag:position];
 
     [_alertBox addSubview:modalBtn];
+
+    [self updateHermesShoeSize];
 }
 
 -(void) updateHermesShoeSize
 {
     CGRect newHermesShoeSize = _alertBox.frame;
-    newHermesShoeSize.size.height += _marginBottom + _btnHeight;
-    newHermesShoeSize.origin.y -= (_marginBottom + _btnHeight)/2;
+    newHermesShoeSize.size.height =_messageHeight+_marginTop + _marginBottom + (_numberOfButtonRows*(_btnHeight+_marginBottom));
+    newHermesShoeSize.origin.y -= (newHermesShoeSize.size.height -  _alertBox.frame.size.height)/2;
     
     //Update our alert box.
     _alertBox.frame = newHermesShoeSize;
@@ -247,23 +250,44 @@ static float HERMES_WINDOW_SIZE_PERCENTAGE = 0.9;
 }
 
 // Put our buttons in place, ie left right top button
--(CGRect) getButtonFrame:(HermesButtonPlaces)position
+-(CGRect) getButtonFrame:(HermesButtonPlaces)type
 {
+    
     CGRect frame;
-    switch (position){
-        case HermesButtonLeft:
-            frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height-_btnHeight-_marginBottom, _halfBtnWidth, _btnHeight);
+    switch (type){
+        case HermesButtonHalf:
+            if(_lastButtonType == HermesButtonHalf){
+                if(_buttonRowCompleted){
+                    // Start new row
+                    frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height, _halfBtnWidth, _btnHeight);
+                    _buttonRowCompleted = NO;
+                    _numberOfButtonRows +=1;
+                } else{
+                    // Finish old row
+                    frame = CGRectMake(_marginLeft + _halfBtnWidth + _marginRight,_alertBox.bounds.size.height - _btnHeight -_marginTop - _marginBottom, _halfBtnWidth, _btnHeight);
+                    _buttonRowCompleted = YES;
+                }
+
+            } else {
+                // start new row
+                frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height, _halfBtnWidth, _btnHeight);
+                _buttonRowCompleted = NO;
+                _numberOfButtonRows +=1;
+            }
+            
             break;
-        case HermesButtonRight:
-            frame = CGRectMake(_marginRight,_alertBox.bounds.size.height-_btnHeight-_marginBottom, _halfBtnWidth, _btnHeight);
-            break;
-        case HermesButtonTop:
-            frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height-(_btnHeight+_marginBottom)*2, _fullBtnWidth, _btnHeight);
+        case HermesButtonFull:
+            _buttonRowCompleted = YES;
+            _numberOfButtonRows +=1;
+            frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height, _fullBtnWidth, _btnHeight);
             break;
         default:
-            frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height-_btnHeight-_marginBottom, _fullBtnWidth, _btnHeight);
+            _buttonRowCompleted = YES;
+            _numberOfButtonRows +=1;
+            frame = CGRectMake(_marginLeft,_alertBox.bounds.size.height, _fullBtnWidth, _btnHeight);
             break;
     }
+    _lastButtonType = type;
     return frame;
 }
 // set Message get an NSString and creates a UILabel.
