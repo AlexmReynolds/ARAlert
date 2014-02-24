@@ -6,15 +6,17 @@
 //  Copyright (c) 2013 Alex Reynolds. All rights reserved.
 //
 
-#import "testingAppDelegate.h"
+#import "AppDelegate.h"
+#import "ARAlert.h"
 
-@implementation testingAppDelegate
+@implementation AppDelegate
 
 @synthesize window = _window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [ARAlert setDefaultOptions:@{kARAlertBackgroundColorKey:[UIColor blueColor]}];
     return YES;
 }
 							

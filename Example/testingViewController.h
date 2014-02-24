@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Hermes.h"
+#import "ARAlert.h"
 @interface testingViewController : UIViewController{
-    Hermes *_hermesView;
+    ARAlert *_arAlert;
 }
 - (IBAction)testtt:(id)sender;
 

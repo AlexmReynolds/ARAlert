@@ -7,7 +7,7 @@
 //
 
 #import "testingViewController.h"
-#import "testingAppDelegate.h"
+#import "AppDelegate.h"
 
 @interface testingViewController ()
 
@@ -33,21 +33,17 @@
 
 - (IBAction)testtt:(id)sender {
     // Init our Hermes Messenger
-    _hermesView = [[Hermes alloc] initWithMessage:@"test \n this is a message \n so deal"];
+    _arAlert = [ARAlert showAlertWithMessage:@"test" completionBlock:^{
+        
+    }];
 
-    // Add an action button
-    [_hermesView addActionButton:@"test" position:HermesButtonFull action:@selector(testButon:) delegate:self];
-    // Add a dismiss button
-    [_hermesView addDismissButton:@"close" position:HermesButtonFull];
-    // Show the message and store a reference to Hermes
-    [_hermesView show];
 
 }
 
--(void)testButon:(Hermes*)hermes
+-(void)testButon:(ARAlert*)hermes
 {
     // Use our reference to dismiss
-    [_hermesView dismissModal];
+    [_arAlert dismiss];
     
     //Take additional action
     NSLog(@"test %@", hermes);
