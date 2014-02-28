@@ -21,13 +21,15 @@ typedef NS_ENUM(NSInteger, ARAlertButtonType) {
 };
 
 typedef NS_ENUM(NSInteger, ARAlertButtonWidth) {
-    ARAlertButtonWidthFull,
+    ARAlertButtonWidthFull = 1,
     ARAlertButtonWidthHalf
 };
 extern NSString *const kARAlertWidthKey;
 extern NSString *const kARAlertWidthTypeKey;
 extern NSString *const kARAlertRoundedCornersKey;
 extern NSString *const kARAlertCornerRadiusKey;
+extern NSString *const kARAlertEdgeInsetsKey;
+
 
 extern NSString *const kARAlertAnimationInTypeKey;
 extern NSString *const kARAlertAnimationOutTypeKey;
@@ -83,6 +85,7 @@ extern NSString *const kARAlertButtonBackgroundColorKey;
 
 @property (nonatomic, readonly) BOOL hasRoundedCorners;
 @property (nonatomic, readonly) CGFloat cornerRadius;
+@property (nonatomic, readonly) NSString *edgeInsetsString;
 
 @property (nonatomic, readonly) NSTimeInterval animateInTimeInterval;
 @property (nonatomic, readonly) NSTimeInterval timeInterval;

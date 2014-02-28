@@ -20,7 +20,7 @@ NSString *const kARAlertWidthKey                            = @"kARAlertWidthKey
 NSString *const kARAlertWidthTypeKey                        = @"kARAlertWidthTypeKey";
 NSString *const kARAlertRoundedCornersKey                   = @"kARAlertRoundedCornersKey";
 NSString *const kARAlertCornerRadiusKey                     = @"kARAlertCornerRadiusKey";
-
+NSString *const kARAlertEdgeInsetsKey                       = @"kARAlertEdgeInsetsKey";
 
 NSString *const kARAlertAnimationInTypeKey                  = @"kARAlertAnimationInTypeKey";
 NSString *const kARAlertAnimationOutTypeKey                 = @"kARAlertAnimationOutTypeKey";
@@ -65,6 +65,7 @@ static ARAlertAnimationType         kARAnimationTypeDefaultIn               = AR
 static ARAlertAnimationType         kARAnimationTypeDefaultOut              = ARAlertAnimationTypeNone;
 
 static ARAlertButtonWidth           ARAlertButtonWidthFullTypeDefault       = ARAlertButtonWidthFull;
+static NSString *                   kAREdgeInsetsDefault                   = @"{10,10,10,10}";
 
 static bool                         kARRoundedCornersDefault                = YES;
 static CGFloat                      kARRoundedCornerRadiusDefault           = 4.0f;
@@ -118,18 +119,18 @@ static CGFloat CRGetScreenWidth() {
     if (self == [ARAlert class]) {
         kARFontDefault = [UIFont systemFontOfSize:16];
         kARTextColorDefault = [UIColor whiteColor];
-        kARBackgroundColorDefault = [UIColor redColor];
+        kARBackgroundColorDefault = [UIColor darkGrayColor];
         kARTextShadowOffsetDefault = CGSizeZero;
         
         kARSubtitleFontDefault = [UIFont systemFontOfSize:12];
         kARSubtitleTextColorDefault = [UIColor whiteColor];
         kARSubtitleTextShadowOffsetDefault = CGSizeZero;
         
-        kARButtonsDefault = @[@{kARAlertButtonTextKey:@"confirm", kARAlertButtonTypeKey :@(ARAlertButtonTypeAction)},@{kARAlertButtonTextKey: @"cancel", kARAlertButtonTypeKey:@(ARAlertButtonTypeDismiss)}];
+        kARButtonsDefault = @[@{kARAlertButtonTextKey:@"confirm", kARAlertButtonTypeKey :@(ARAlertButtonTypeAction),kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)},@{kARAlertButtonTextKey: @"cancel", kARAlertButtonTypeKey:@(ARAlertButtonTypeDismiss), kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)}];
         
         kARButtonFontDefault = [UIFont systemFontOfSize:16];
         kARButtonTextColorDefault = [UIColor whiteColor];
-        kARButtonBackgroundColorDefault = [UIColor redColor];
+        kARButtonBackgroundColorDefault = [UIColor lightGrayColor];
     }
 }
 - (instancetype)init {
@@ -137,7 +138,7 @@ static CGFloat CRGetScreenWidth() {
     if (self) {
         UIWindow *alertWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         alertWindow.backgroundColor = [UIColor clearColor];
-        alertWindow.userInteractionEnabled = NO;
+        alertWindow.userInteractionEnabled = YES;
         alertWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         alertWindow.windowLevel = UIWindowLevelStatusBar;
         alertWindow.rootViewController = [UIViewController new];
@@ -173,6 +174,9 @@ static CGFloat CRGetScreenWidth() {
     
     if (defaultOptions[kARAlertRoundedCornersKey])
         kARRoundedCornersDefault = [defaultOptions[kARAlertRoundedCornersKey] boolValue];
+    
+    if (defaultOptions[kARAlertEdgeInsetsKey])
+        kAREdgeInsetsDefault = defaultOptions[kARAlertEdgeInsetsKey];
     
     if (defaultOptions[kARAlertAnimationOutTypeKey])
         kARAnimationTypeDefaultOut = [defaultOptions[kARAlertAnimationOutTypeKey] integerValue];
@@ -234,6 +238,7 @@ static CGFloat CRGetScreenWidth() {
 
 - (UIView*)alertView {
     CGSize size = CGSizeMake(self.alertWidth, 300); //[self getAlertSize];
+    
     ARAlertView *alertView = [[ARAlertView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     alertView.alert = self;
     return alertView;
@@ -247,6 +252,9 @@ static CGFloat CRGetScreenWidth() {
     return _options[kARAlertWidthKey] ?
     [_options[kARAlertWidthKey] floatValue] :
     kARAlertWidthDefault;
+}
+-(NSString *)edgeInsetsString{
+    return _options[kARAlertEdgeInsetsKey] ?: kAREdgeInsetsDefault;
 }
 - (NSString*)backgroundColor {
     return _options[kARAlertBackgroundColorKey] ?: kARBackgroundColorDefault;
@@ -324,9 +332,10 @@ static CGFloat CRGetScreenWidth() {
 
 
 // dismissModal removes the Hermes view from the superview.
-- (void) dismissModal
+- (void) dismiss
 {
-  // [_alertView removeFromSuperview];
+    _alertWindow.hidden = YES;
+   [self.alertView removeFromSuperview];
 }
 
 @end
@@ -335,11 +344,14 @@ static CGFloat CRGetScreenWidth() {
 #pragma mark - ARAlertView
 static CGFloat                  	kARButtonWidthHalf                      = 0.5;
 static CGFloat                  	kARButtonWidthFull                      = 1.0;
+static CGFloat                  	kARButtonHeight                         = 44.0;
+
 
 @interface ARAlertView ()
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) UIView *buttonView;
+@property (nonatomic, strong) UIView *contentView;
 @end
 
 
@@ -348,63 +360,91 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.userInteractionEnabled = YES;
+        UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
+        self.contentView = contentView;
+        contentView.userInteractionEnabled = YES;
+        [self addSubview:contentView];
+
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        [self addSubview:label];
+        [contentView addSubview:label];
         self.label = label;
         
         UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [self addSubview:subtitleLabel];
+        [contentView addSubview:subtitleLabel];
         self.subtitleLabel = subtitleLabel;
         
         UIView *buttonView = [[UILabel alloc] initWithFrame:CGRectZero];
-        [self addSubview:buttonView];
+        buttonView.userInteractionEnabled = YES;
+        [contentView addSubview:buttonView];
         buttonView.backgroundColor = [UIColor blackColor];
         self.buttonView = buttonView;
     }
     return self;
 }
 - (void)updateLayout {
-    CGRect bounds = self.bounds;
+    CGRect bounds = _contentView.bounds;
     CGFloat height = [self getTextHeightForWidth:bounds.size.width forText:self.alert.text withFont:self.alert.font];
     
     if (self.alert.subtitleText == nil) {
-        self.label.frame = CGRectMake(0,
-                                      0,
-                                      bounds.size.width,
-                                      height);
-        _buttonView.frame = CGRectMake(_buttonView.frame.origin.x,
-                                       height,
-                                       _buttonView.frame.size.width,
-                                       _buttonView.frame.size.height);
-        
-        self.frame = CGRectMake(self.frame.origin.x,
-                                self.frame.origin.y,
-                                self.frame.size.width,
-                                _buttonView.frame.size.height + height);
+        [self updateLayoutWithOutSubtitleInBounds:bounds withTextHeight:height];
     } else {
+        [self updateLayoutWithSubtitleInBounds:bounds withTextHeight:height];
 
-        CGFloat subtitleHeight = [self getTextHeightForWidth:bounds.size.width forText:self.alert.subtitleText withFont:self.alert.subtitleFont];
 
-        self.label.frame = CGRectMake(0,
-                                      0,
-                                      bounds.size.width,
-                                      height);
-        
-        self.subtitleLabel.frame = CGRectMake(0,
-                                              height,
-                                              bounds.size.width,
-                                              subtitleHeight);
-        
-        _buttonView.frame = CGRectMake(_buttonView.frame.origin.x,
-                                       height + subtitleHeight,
-                                       _buttonView.frame.size.width,
-                                       _buttonView.frame.size.height);
-        self.frame = CGRectMake(self.frame.origin.x,
-                                self.frame.origin.y,
-                                self.frame.size.width,
-                                _buttonView.frame.size.height + height + subtitleHeight);
     }
+    [self sizeToFit];
+}
+
+-(void)sizeToFit
+{
+    UIEdgeInsets inset = UIEdgeInsetsFromString(_alert.edgeInsetsString);
+
+    [super sizeToFit];
+    
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _contentView.frame.size.width + inset.left + inset.right, _contentView.frame.size.height +inset.top + inset.bottom);
+}
+
+-(void)updateLayoutWithSubtitleInBounds:(CGRect)bounds withTextHeight:(CGFloat)height
+{
+    CGFloat subtitleHeight = [self getTextHeightForWidth:bounds.size.width forText:self.alert.subtitleText withFont:self.alert.subtitleFont];
+    
+    self.label.frame = CGRectMake(0,
+                                  0,
+                                  bounds.size.width,
+                                  height);
+    
+    self.subtitleLabel.frame = CGRectMake(0,
+                                          height,
+                                          bounds.size.width,
+                                          subtitleHeight);
+    
+    _buttonView.frame = CGRectMake(_buttonView.frame.origin.x,
+                                   height + subtitleHeight,
+                                   _buttonView.frame.size.width,
+                                   _buttonView.frame.size.height);
+    _contentView.frame = CGRectMake(_contentView.frame.origin.x,
+                                    _contentView.frame.origin.y,
+                                    self.frame.size.width,
+                                    _buttonView.frame.size.height + height + subtitleHeight);
+}
+
+-(void)updateLayoutWithOutSubtitleInBounds:(CGRect)bounds withTextHeight:(CGFloat)height
+{
+    self.label.frame = CGRectMake(0,
+                                  0,
+                                  bounds.size.width,
+                                  height);
+    _buttonView.frame = CGRectMake(_buttonView.frame.origin.x,
+                                   height,
+                                   _buttonView.frame.size.width,
+                                   _buttonView.frame.size.height);
+    
+    _contentView.frame = CGRectMake(_contentView.frame.origin.x,
+                                    _contentView.frame.origin.y,
+                                    _contentView.frame.size.width,
+                                    _buttonView.frame.size.height + height);
 }
 
 -(CGFloat)getTextHeightForWidth:(CGFloat)width forText:(NSString *)text withFont:(UIFont*)font
@@ -418,7 +458,7 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 -(CGRect) getButtonFrame:(ARAlertButtonWidth)type lastButtonWidthType:(ARAlertButtonWidth)lastWidthType yOffset:(CGFloat*)yOffset
 {
     CGRect frame;
-    CGRect bounds = self.bounds;
+    CGRect bounds = _contentView.bounds;
     switch (type){
         case ARAlertButtonWidthHalf:
             if(lastWidthType == ARAlertButtonWidthHalf){
@@ -430,9 +470,9 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
                     // Finish old row
                     frame = CGRectMake(bounds.size.width * kARButtonWidthHalf,
                                        *yOffset,
-                                       bounds.size.width * kARButtonWidthHalf, 50);
+                                       bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
                     //_buttonRowCompleted = YES;
-                    *yOffset += 50;
+                    *yOffset += kARButtonHeight;
                 //}
                 
             } else {
@@ -440,9 +480,8 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
                 
                 frame = CGRectMake(0,
                                    *yOffset,
-                                   bounds.size.width * kARButtonWidthHalf, 50);
+                                   bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
                 //_buttonRowCompleted = NO;
-                *yOffset += 50;
             }
             
             break;
@@ -451,13 +490,13 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 
             frame = CGRectMake(0,
                                *yOffset,
-                               bounds.size.width * kARButtonWidthFull, 50);
-            *yOffset += 50;
+                               bounds.size.width * kARButtonWidthFull, kARButtonHeight);
+            *yOffset += kARButtonHeight;
             break;
         default:
             //_buttonRowCompleted = YES;
             
-            frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, 50);
+            frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
             break;
     }
     return frame;
@@ -466,6 +505,7 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 
 - (void)setAlert:(ARAlert *)alert {
     _alert = alert;
+    _contentView.frame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsFromString(_alert.edgeInsetsString));
     _label.text = alert.text;
     _label.font = alert.font;
     _label.textColor = alert.textColor;
@@ -493,10 +533,15 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 
 -(CGRect)getButtonViewFrameToFitSubviews:(NSArray*)subviews
 {
+    NSMutableArray *yPositions = [[NSMutableArray alloc] init];
     CGFloat maxWidth = 0;
     CGFloat maxY = 0 ;
     CGFloat maxYViewsHeight = 0;
     for(UIView *view in subviews){
+        if([yPositions containsObject:@(view.frame.origin.y)]){
+            maxWidth +=  view.frame.size.width;
+        };
+        [yPositions addObject:@(view.frame.origin.y)];
         maxWidth = MAX(maxWidth, view.frame.size.width);
         maxY = MAX(maxY, view.frame.origin.y);
         if(maxY == view.frame.origin.y)
@@ -508,13 +553,13 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 -(void)loadButtons:(NSArray *)buttons
 {
     CGFloat yPosition = 0;
-    ARAlertButtonWidth lastWidthType;
+    ARAlertButtonWidth lastWidthType = nil;
     for(NSDictionary * button in buttons){
         [self addButton:button lastWidthType:lastWidthType atYOffset:&yPosition];
         if(!button[kARAlertWidthTypeKey]){
             lastWidthType = ARAlertButtonWidthFullTypeDefault;
         } else {
-            lastWidthType = button[kARAlertWidthTypeKey];
+            lastWidthType = [button[kARAlertWidthTypeKey] integerValue];
         }
 
     }
@@ -524,7 +569,7 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 - (void) addButton:(NSDictionary*)button lastWidthType:(ARAlertButtonWidth)widthType atYOffset:(CGFloat*)yoffset
 {
     // INIT the button in the right location.
-    CGRect frame = [self getButtonFrame:button[kARAlertWidthTypeKey] lastButtonWidthType:widthType yOffset:yoffset];
+    CGRect frame = [self getButtonFrame:[button[kARAlertWidthTypeKey] integerValue] lastButtonWidthType:widthType yOffset:yoffset];
     
     UIButton *modalBtn = [[UIButton alloc] initWithFrame:frame];
     
@@ -534,7 +579,7 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
     modalBtn.backgroundColor = _alert.buttonBackgroundColor;
     
     if([button[kARAlertButtonTypeKey]integerValue] == ARAlertButtonTypeDismiss)
-        [modalBtn addTarget:self.alert action:@selector(dismissModal) forControlEvents: UIControlEventTouchUpInside];
+        [modalBtn addTarget:self.alert action:@selector(dismiss) forControlEvents: UIControlEventTouchUpInside];
     if([button[kARAlertButtonTypeKey]integerValue] == ARAlertButtonTypeAction)
         [modalBtn addTarget:self.alert action:@selector(buttonPressed) forControlEvents: UIControlEventTouchUpInside];
     

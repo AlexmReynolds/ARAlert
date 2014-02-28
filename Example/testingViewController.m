@@ -33,7 +33,7 @@
 
 - (IBAction)testtt:(id)sender {
     // Init our Hermes Messenger
-    _arAlert = [ARAlert showAlertWithMessage:@"test" completionBlock:^{
+    _arAlert = [ARAlert showAlertWithMessage:@"Hi Bree" completionBlock:^{
         
     }];
 
