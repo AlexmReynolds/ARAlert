@@ -1,9 +1,9 @@
-Hermes
+ARAlert
 ======
 
 Hermes is a custom alert modal class used to display alerts to uses
 
-Adding Hermes Messenger Window
+Adding Messenger Window
 ```
 [ARAlert showAlertWithMessage:@"Hello World" completionBlock:nil];
 ```
@@ -40,7 +40,7 @@ NSDictionary *options = @{
 };
 ```
 
-Init our Hermes Messenger
+Init our ARAlert Messenger
 ```
 message = [ARAlert showAlertWithOptions:options completionBlock:nil];
 ```
