@@ -126,7 +126,10 @@ static CGFloat CRGetScreenWidth() {
         kARSubtitleTextColorDefault = [UIColor whiteColor];
         kARSubtitleTextShadowOffsetDefault = CGSizeZero;
         
-        kARButtonsDefault = @[@{kARAlertButtonTextKey:@"confirm", kARAlertButtonTypeKey :@(ARAlertButtonTypeAction),kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)},@{kARAlertButtonTextKey: @"cancel", kARAlertButtonTypeKey:@(ARAlertButtonTypeDismiss), kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)}];
+        kARButtonsDefault = @[
+  @{kARAlertButtonTextKey:@"confirm", kARAlertButtonTypeKey :@(ARAlertButtonTypeAction),kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)},
+  @{kARAlertButtonTextKey: @"cancel", kARAlertButtonTypeKey:@(ARAlertButtonTypeDismiss), kARAlertWidthTypeKey:@(ARAlertButtonWidthHalf)}
+  ];
         
         kARButtonFontDefault = [UIFont systemFontOfSize:16];
         kARButtonTextColorDefault = [UIColor whiteColor];
@@ -355,7 +358,9 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
 @end
 
 
-@implementation ARAlertView
+@implementation ARAlertView{
+    BOOL _buttonRowCompleted;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -458,22 +463,23 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
 -(CGRect) getButtonFrame:(ARAlertButtonWidth)type lastButtonWidthType:(ARAlertButtonWidth)lastWidthType yOffset:(CGFloat*)yOffset
 {
     CGRect frame;
+
     CGRect bounds = _contentView.bounds;
     switch (type){
         case ARAlertButtonWidthHalf:
             if(lastWidthType == ARAlertButtonWidthHalf){
-//                if(_buttonRowCompleted){
-//                    // Start new row
-//                    frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, 50);
-//                    //_buttonRowCompleted = NO;
-//                } else{
+                if(_buttonRowCompleted){
+                    // Start new row
+                    frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, 50);
+                    _buttonRowCompleted = NO;
+                } else{
                     // Finish old row
                     frame = CGRectMake(bounds.size.width * kARButtonWidthHalf,
                                        *yOffset,
                                        bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
-                    //_buttonRowCompleted = YES;
+                    _buttonRowCompleted = YES;
                     *yOffset += kARButtonHeight;
-                //}
+                }
                 
             } else {
                 // start new row
@@ -481,12 +487,12 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
                 frame = CGRectMake(0,
                                    *yOffset,
                                    bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
-                //_buttonRowCompleted = NO;
+                _buttonRowCompleted = NO;
             }
             
             break;
         case ARAlertButtonWidthFull:
-            //_buttonRowCompleted = YES;
+            _buttonRowCompleted = YES;
 
             frame = CGRectMake(0,
                                *yOffset,
@@ -494,7 +500,7 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
             *yOffset += kARButtonHeight;
             break;
         default:
-            //_buttonRowCompleted = YES;
+            _buttonRowCompleted = YES;
             
             frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
             break;
