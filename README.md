@@ -4,7 +4,7 @@ Hermes
 Hermes is a custom alert modal class used to display alerts to uses
 
 Adding Hermes Messenger Window
-Hermes *message = [[Hermes alloc] initWithMessage:@"test \n this is a message \n so deal"];
+[ARAlert showAlertWithMessage:@"Hello World" completionBlock:nil];
 
 Adding Buttons:
 

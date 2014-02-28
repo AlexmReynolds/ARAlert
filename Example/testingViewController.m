@@ -32,8 +32,13 @@
 }
 
 - (IBAction)testtt:(id)sender {
+    
+    NSDictionary *options = @{
+                              kARAlertTextKey: @"hello world",
+                              kARAlertButtonsKey : @[@{kARAlertButtonTextKey:@"Goodbye"}, @{kARAlertButtonTextKey : @"Hello"}]
+                              };
     // Init our Hermes Messenger
-    _arAlert = [ARAlert showAlertWithMessage:@"Hi Bree" completionBlock:^{
+    _arAlert = [ARAlert showAlertWithOptions:options completionBlock:^{
         
     }];
 

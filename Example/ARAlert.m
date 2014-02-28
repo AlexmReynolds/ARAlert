@@ -502,7 +502,11 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
         default:
             _buttonRowCompleted = YES;
             
-            frame = CGRectMake(0,*yOffset, bounds.size.width * kARButtonWidthHalf, kARButtonHeight);
+            frame = CGRectMake(0,
+                               *yOffset,
+                               bounds.size.width * kARButtonWidthFull, kARButtonHeight);
+            *yOffset += kARButtonHeight;
+
             break;
     }
     return frame;
