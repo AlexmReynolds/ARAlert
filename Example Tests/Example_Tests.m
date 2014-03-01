@@ -84,9 +84,51 @@
     XCTAssertEqual(sut.subtitleTextColor, [UIColor redColor], @"Text color was not red");
 }
 
+- (void)testSettingSubtitleTextCenterAlignDefault_ShouldSetTextAlignCenter
+{
+    [ARAlert setDefaultOptions:@{kARAlertSubtitleTextAlignmentKey : @(NSTextAlignmentCenter)}];
+    XCTAssertEqual(sut.subtitleTextAlignment, NSTextAlignmentCenter, @"Text was not aligned center");
+}
+
+- (void)testSettingInsets_ShouldSetContentInset
+{
+    [ARAlert setDefaultOptions:@{kARAlertEdgeInsetsKey : @"{20,20,20,20}"}];
+    XCTAssertEqual(sut.edgeInsetsString, @"{20,20,20,20}", @"Insets were not set");
+}
 - (void)testSettingSubtitleFontArialDefault_ShouldSetFontToArial
 {
     [ARAlert setDefaultOptions:@{kARAlertSubtitleFontKey : [UIFont fontWithName:@"Arial" size:10.0]}];
     XCTAssertTrue([sut.subtitleFont.familyName isEqualToString:@"Arial"], @"Font was not arial");
 }
+
+#pragma mark - Animation
+
+-(void)testSettingAnimationInToPop_ShouldSetAnimationInToPop
+{
+    [ARAlert setDefaultOptions:@{kARAlertAnimationInTypeKey : @(ARAlertAnimationTypePop)}];
+    XCTAssertEqual(ARAlertAnimationTypePop, sut.inAnimationType, @"Animation was not set to pop");
+}
+
+#pragma mark - Buttons
+-(void)testButtonFontToArial_ShouldSetToArial
+{
+    [ARAlert setDefaultOptions:@{kARAlertButtonFontKey : [UIFont fontWithName:@"Arial" size:10.0]}];
+    XCTAssertTrue([sut.buttonFont.familyName isEqualToString:@"Arial"], @"Font was not arial");
+}
+
+-(void)testSettingButtonBackgroundColor_ShouldSetButtonBackground
+{
+    [ARAlert setDefaultOptions:@{kARAlertButtonBackgroundColorKey : [UIColor redColor]}];
+    XCTAssertEqual(sut.buttonBackgroundColor,[UIColor redColor], @"Button color was not set to red");
+}
+
+-(void)testSettingButtonTextColor_ShoulSetButtonTextColor
+{
+    [ARAlert setDefaultOptions:@{kARAlertButtonTextColorKey: [UIColor greenColor]}];
+    XCTAssertEqual(sut.buttonTextColor, [UIColor greenColor], @"Color was not set tot green");
+}
+
+
+
+
 @end

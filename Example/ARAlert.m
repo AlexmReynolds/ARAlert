@@ -117,6 +117,10 @@ static CGFloat CRGetScreenWidth() {
 @implementation ARAlert
 + (void)initialize {
     if (self == [ARAlert class]) {
+        kARAnimationTypeDefaultIn = ARAlertAnimationTypeSpring;
+        kARAnimationTypeDefaultOut = ARAlertAnimationTypeSpring;
+
+        
         kARFontDefault = [UIFont systemFontOfSize:16];
         kARTextColorDefault = [UIColor whiteColor];
         kARBackgroundColorDefault = [UIColor darkGrayColor];
@@ -239,7 +243,7 @@ static CGFloat CRGetScreenWidth() {
 
 #pragma mark - Alert View Helpers
 
-- (UIView*)alertView {
+- (UIView*)makeAlertView {
     CGSize size = CGSizeMake(self.alertWidth, 300); //[self getAlertSize];
     
     ARAlertView *alertView = [[ARAlertView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -256,6 +260,16 @@ static CGFloat CRGetScreenWidth() {
     [_options[kARAlertWidthKey] floatValue] :
     kARAlertWidthDefault;
 }
+-(ARAlertAnimationType)inAnimationType
+{
+    return [_options[kARAlertAnimationInTypeKey] integerValue] ?: kARAnimationTypeDefaultIn;
+}
+
+-(ARAlertAnimationType)outAnimationType
+{
+    return [_options[kARAlertAnimationOutTypeKey] integerValue] ?: kARAnimationTypeDefaultOut;
+}
+
 -(NSString *)edgeInsetsString{
     return _options[kARAlertEdgeInsetsKey] ?: kAREdgeInsetsDefault;
 }
@@ -269,6 +283,10 @@ static CGFloat CRGetScreenWidth() {
 
 - (UIFont*)font {
     return _options[kARAlertFontKey] ?: kARFontDefault;
+}
+
+- (NSTextAlignment)textAlignment {
+    return [_options[kARAlertTextAlignmentKey] integerValue] ?: kARTextAlignmentDefault;
 }
 
 - (UIColor*)textColor {
@@ -287,8 +305,8 @@ static CGFloat CRGetScreenWidth() {
     return _options[kARAlertSubtitleFontKey] ?: kARSubtitleFontDefault;
 }
 
-- (NSTextAlignment)textAlignment {
-    return [_options[kARAlertTextAlignmentKey] integerValue] ?: kARTextAlignmentDefault;
+- (NSTextAlignment)subtitleTextAlignment {
+    return [_options[kARAlertSubtitleTextAlignmentKey] integerValue] ?: kARSubtitleTextAlignmentDefault;
 }
 
 - (BOOL)hasRoundedCorners {
@@ -321,10 +339,139 @@ static CGFloat CRGetScreenWidth() {
 - (void)displayAlert:(ARAlert*)alert {
     _alertWindow.hidden = NO;
     
-    UIView *alertView = alert.alertView;
+    UIView *alertView = [alert makeAlertView];
     alertView.frame = [self getAlertFrameInWindow:_alertWindow forAlert:alertView];
     [_alertWindow.rootViewController.view addSubview:alertView];
+    _alertView = alertView;
+    
+    
+    switch (self.inAnimationType) {
+        case ARAlertAnimationTypeFade:
+            [self animateFadeIn:alertView];
+            break;
+        case ARAlertAnimationTypePop:
+            [self animatePopIn:alertView];
+            break;
+        case ARAlertAnimationTypeSpring:
+            [self animateSpringIn:alertView];
+            break;
+            
+        default:
+            
+            break;
+    }
 }
+
+#pragma makr - animations
+
+-(void)animatePopIn:(UIView *)view
+{
+    view.alpha = 0.0;
+    view.transform = CGAffineTransformMakeScale(0.8, 0.8);
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.05, 1.05);
+
+                         view.alpha = 1.0;
+                         
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.2
+                                               delay:0.0
+                                             options:UIViewAnimationOptionBeginFromCurrentState
+                                          animations:^{
+                                              view.transform = CGAffineTransformIdentity;
+                                          }
+                                          completion:^(BOOL finished){
+                                              if(self.completion){
+                                                  self.completion();
+                                              }
+                                          }];
+                     }];
+}
+
+-(void)animatePopOut:(UIView *)view withCompletion:(void(^)(BOOL))completion
+{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.05, 1.05);
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.2
+                                               delay:0.0
+                                             options:UIViewAnimationOptionBeginFromCurrentState
+                                          animations:^{
+                                              view.alpha = 0.0;
+                                              view.transform = CGAffineTransformMakeScale(0.8, 0.8);
+                                          }
+                                          completion:completion];
+                     }];
+}
+
+-(void)animateSpringIn:(UIView *)view
+{
+    view.transform = CGAffineTransformMakeTranslation(0-view.frame.size.width, 0);
+    [UIView animateWithDuration:0.5
+                          delay:0
+         usingSpringWithDamping:kARSpringDampingDefault
+          initialSpringVelocity:kARSpringInitialVelocityDefault
+                        options:0
+                     animations:^{
+                         view.transform = CGAffineTransformIdentity;
+                     } completion:^(BOOL finished) {
+                         if(self.completion){
+                             self.completion();
+                         }
+                     }];
+}
+
+-(void)animateSpringOut:(UIView *)view withCompletion:(void(^)(BOOL))completion
+{
+    [UIView animateWithDuration:0.5
+                          delay:0
+         usingSpringWithDamping:kARSpringDampingDefault
+          initialSpringVelocity:kARSpringInitialVelocityDefault
+                        options:0
+                     animations:^{
+                         view.transform = CGAffineTransformMakeTranslation(view.frame.origin.x + view.frame.size.width, 0);
+                     } completion:completion];
+}
+
+
+-(void)animateFadeIn:(UIView*)view
+{
+    view.alpha = 0.0;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         view.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished){
+                         if(self.completion){
+                             self.completion();
+                         }
+                     }];
+}
+
+-(void)animateFadeOut:(UIView*)view withCompletion:(void(^)(BOOL))completion
+{
+    
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         view.alpha = 0.0;
+                     }
+                     completion:completion];
+}
+
+
 
 -(CGRect)getAlertFrameInWindow:(UIWindow *)window forAlert:(UIView*)alert
 {
@@ -337,14 +484,55 @@ static CGFloat CRGetScreenWidth() {
 // dismissModal removes the Hermes view from the superview.
 - (void) dismiss
 {
-    _alertWindow.hidden = YES;
-   [self.alertView removeFromSuperview];
+    void (^completion)(BOOL) = ^(BOOL finished){
+        _alertWindow.hidden = YES;
+        [self.alertView removeFromSuperview];
+    };
+    switch (self.outAnimationType) {
+        case ARAlertAnimationTypeFade:
+            [self animateFadeOut:self.alertView withCompletion:completion];
+            break;
+        case ARAlertAnimationTypePop:
+            [self animatePopOut:self.alertView withCompletion:completion];
+            break;
+        case ARAlertAnimationTypeSpring:
+            [self animateSpringOut:self.alertView withCompletion:completion];
+            break;
+            
+        default:
+            completion(YES);
+            
+            break;
+    }
+
 }
 
+-(void)actionButtonClicked:(UIButton *)button
+{
+
+    [self notifyDelegateButtonClick:button];
+}
+
+-(void)dismissButtonClicked:(UIButton *)button
+{
+    [self dismiss];
+    [self notifyDelegateButtonClick:button];
+}
+
+-(void)notifyDelegateButtonClick:(UIButton*)button
+{
+    UIView *superView = button.superview;
+    NSInteger index = [superView.subviews indexOfObject:button];
+    if([self.delegate respondsToSelector:@selector(buttonClickedAtIndex:)]){
+        [self.delegate buttonClickedAtIndex:index];
+    }
+}
 @end
 
 
+
 #pragma mark - ARAlertView
+
 static CGFloat                  	kARButtonWidthHalf                      = 0.5;
 static CGFloat                  	kARButtonWidthFull                      = 1.0;
 static CGFloat                  	kARButtonHeight                         = 44.0;
@@ -431,7 +619,7 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
                                    _buttonView.frame.size.height);
     _contentView.frame = CGRectMake(_contentView.frame.origin.x,
                                     _contentView.frame.origin.y,
-                                    self.frame.size.width,
+                                    _contentView.frame.size.width,
                                     _buttonView.frame.size.height + height + subtitleHeight);
 }
 
@@ -589,9 +777,9 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
     modalBtn.backgroundColor = _alert.buttonBackgroundColor;
     
     if([button[kARAlertButtonTypeKey]integerValue] == ARAlertButtonTypeDismiss)
-        [modalBtn addTarget:self.alert action:@selector(dismiss) forControlEvents: UIControlEventTouchUpInside];
+        [modalBtn addTarget:self.alert action:@selector(dismissButtonClicked:) forControlEvents: UIControlEventTouchUpInside];
     if([button[kARAlertButtonTypeKey]integerValue] == ARAlertButtonTypeAction)
-        [modalBtn addTarget:self.alert action:@selector(buttonPressed) forControlEvents: UIControlEventTouchUpInside];
+        [modalBtn addTarget:self.alert action:@selector(actionButtonClicked:) forControlEvents: UIControlEventTouchUpInside];
     
     
     [_buttonView addSubview:modalBtn];

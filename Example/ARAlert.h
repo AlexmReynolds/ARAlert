@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ARAlertDelegate <NSObject>
+
+-(void)buttonClickedAtIndex:(NSInteger)buttonIndex;
+
+@end
+
 typedef NS_ENUM(NSInteger, ARAlertAnimationType) {
-    ARAlertAnimationTypeNone,
+    ARAlertAnimationTypeNone = 1,
     ARAlertAnimationTypePop,
     ARAlertAnimationTypeSpring,
     ARAlertAnimationTypeFade
@@ -67,12 +73,14 @@ extern NSString *const kARAlertButtonFontKey;
 extern NSString *const kARAlertButtonTextColorKey;
 extern NSString *const kARAlertButtonBackgroundColorKey;
 
-@interface ARAlert : NSObject
+@interface ARAlert : NSObject<UIAlertViewDelegate>
+
 
 //Top Level Properties
 @property (nonatomic, strong) UIWindow *alertWindow;
 @property (nonatomic, strong) NSDictionary *options;
 @property (nonatomic, copy) void(^completion)(void);
+@property (nonatomic, weak) id <ARAlertDelegate> delegate;
 
 //Views and Layout Data
 
@@ -113,6 +121,10 @@ extern NSString *const kARAlertButtonBackgroundColorKey;
 
 @property (nonatomic, readonly) UIColor *backgroundColor;
 @property (nonatomic, readonly) UIImage *image;
+@property (nonatomic, readonly) UIColor *buttonBackgroundColor;
+@property (nonatomic, readonly) UIColor *buttonTextColor;
+@property (nonatomic, readonly) UIFont *buttonFont;
+
 
 + (void)setDefaultOptions:(NSDictionary*)defaultOptions;
 + (instancetype)showAlertWithMessage:(NSString*)message completionBlock:(void (^)(void))completion;
