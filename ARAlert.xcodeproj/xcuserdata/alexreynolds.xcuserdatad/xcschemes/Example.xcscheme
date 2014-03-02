@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E9A9EC3F16A7773100144A31"
-               BuildableName = "Example.app"
-               BlueprintName = "Example"
-               ReferencedContainer = "container:Example.xcodeproj">
+               BuildableName = "ARAlert.app"
+               BlueprintName = "ARAlert"
+               ReferencedContainer = "container:ARAlert.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E73232E018B5E6BA00845042"
-               BuildableName = "Example Tests.xctest"
-               BlueprintName = "Example Tests"
-               ReferencedContainer = "container:Example.xcodeproj">
+               BuildableName = "ARAlert Tests.xctest"
+               BlueprintName = "ARAlert Tests"
+               ReferencedContainer = "container:ARAlert.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E9A9EC3F16A7773100144A31"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
-            ReferencedContainer = "container:Example.xcodeproj">
+            BuildableName = "ARAlert.app"
+            BlueprintName = "ARAlert"
+            ReferencedContainer = "container:ARAlert.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E9A9EC3F16A7773100144A31"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
-            ReferencedContainer = "container:Example.xcodeproj">
+            BuildableName = "ARAlert.app"
+            BlueprintName = "ARAlert"
+            ReferencedContainer = "container:ARAlert.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E9A9EC3F16A7773100144A31"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
-            ReferencedContainer = "container:Example.xcodeproj">
+            BuildableName = "ARAlert.app"
+            BlueprintName = "ARAlert"
+            ReferencedContainer = "container:ARAlert.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

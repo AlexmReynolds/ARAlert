@@ -73,7 +73,7 @@ extern NSString *const kARAlertButtonFontKey;
 extern NSString *const kARAlertButtonTextColorKey;
 extern NSString *const kARAlertButtonBackgroundColorKey;
 
-@interface ARAlert : NSObject<UIAlertViewDelegate>
+@interface ARAlert : NSObject
 
 
 //Top Level Properties

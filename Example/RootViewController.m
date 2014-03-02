@@ -60,10 +60,14 @@
     _arAlert = [ARAlert showAlertWithOptions:options completionBlock:^{
         
     }];
+    _arAlert.delegate = self;
 
 
 }
-
+-(void)buttonClickedAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"Button clicked in modal at index %i", buttonIndex);
+}
 -(NSNumber *)getInAnimation
 {
     switch (animationInType.selectedSegmentIndex) {

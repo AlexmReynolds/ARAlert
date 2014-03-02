@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ARAlert.h"
-@interface RootViewController : UIViewController{
+@interface RootViewController : UIViewController<ARAlertDelegate>{
     ARAlert *_arAlert;
 }
 - (IBAction)testtt:(id)sender;

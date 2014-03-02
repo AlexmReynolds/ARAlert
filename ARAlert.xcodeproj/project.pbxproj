@@ -12,6 +12,7 @@
 		E73232E518B5E6BA00845042 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A9EC4416A7773100144A31 /* UIKit.framework */; };
 		E73232EB18B5E6BA00845042 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E73232E918B5E6BA00845042 /* InfoPlist.strings */; };
 		E73232ED18B5E6BA00845042 /* Example_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E73232EC18B5E6BA00845042 /* Example_Tests.m */; };
+		E7E0E00A18C2DE82002D7BFA /* ARAlert-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7E0E00918C2DE82002D7BFA /* ARAlert-Info.plist */; };
 		E9A9EC4516A7773100144A31 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A9EC4416A7773100144A31 /* UIKit.framework */; };
 		E9A9EC4716A7773100144A31 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A9EC4616A7773100144A31 /* Foundation.framework */; };
 		E9A9EC4916A7773100144A31 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A9EC4816A7773100144A31 /* CoreGraphics.framework */; };
@@ -37,20 +38,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E73232E118B5E6BA00845042 /* Example Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Example Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E73232E118B5E6BA00845042 /* ARAlert Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ARAlert Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E73232E218B5E6BA00845042 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E73232E818B5E6BA00845042 /* Example Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Example Tests-Info.plist"; sourceTree = "<group>"; };
+		E73232E818B5E6BA00845042 /* ARAlert Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ARAlert Tests-Info.plist"; sourceTree = "<group>"; };
 		E73232EA18B5E6BA00845042 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E73232EC18B5E6BA00845042 /* Example_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Example_Tests.m; sourceTree = "<group>"; };
 		E73232EE18B5E6BA00845042 /* Example Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example Tests-Prefix.pch"; sourceTree = "<group>"; };
-		E9A9EC4016A7773100144A31 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7E0E00918C2DE82002D7BFA /* ARAlert-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ARAlert-Info.plist"; sourceTree = "<group>"; };
+		E9A9EC4016A7773100144A31 /* ARAlert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAlert.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A9EC4416A7773100144A31 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E9A9EC4616A7773100144A31 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E9A9EC4816A7773100144A31 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		E9A9EC4C16A7773100144A31 /* Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Example-Info.plist"; sourceTree = "<group>"; };
 		E9A9EC4E16A7773100144A31 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E9A9EC5016A7773100144A31 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E9A9EC5216A7773100144A31 /* Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Prefix.pch"; sourceTree = "<group>"; };
+		E9A9EC5216A7773100144A31 /* ARAlert-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ARAlert-Prefix.pch"; sourceTree = "<group>"; };
 		E9A9EC5316A7773100144A31 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E9A9EC5416A7773100144A31 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E9A9EC5616A7773100144A31 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -115,7 +116,7 @@
 		E73232E718B5E6BA00845042 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E73232E818B5E6BA00845042 /* Example Tests-Info.plist */,
+				E73232E818B5E6BA00845042 /* ARAlert Tests-Info.plist */,
 				E73232E918B5E6BA00845042 /* InfoPlist.strings */,
 				E73232EE18B5E6BA00845042 /* Example Tests-Prefix.pch */,
 			);
@@ -135,8 +136,8 @@
 		E9A9EC4116A7773100144A31 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E9A9EC4016A7773100144A31 /* Example.app */,
-				E73232E118B5E6BA00845042 /* Example Tests.xctest */,
+				E9A9EC4016A7773100144A31 /* ARAlert.app */,
+				E73232E118B5E6BA00845042 /* ARAlert Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -170,10 +171,10 @@
 		E9A9EC4B16A7773100144A31 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E9A9EC4C16A7773100144A31 /* Example-Info.plist */,
+				E7E0E00918C2DE82002D7BFA /* ARAlert-Info.plist */,
 				E9A9EC4D16A7773100144A31 /* InfoPlist.strings */,
 				E9A9EC5016A7773100144A31 /* main.m */,
-				E9A9EC5216A7773100144A31 /* Example-Prefix.pch */,
+				E9A9EC5216A7773100144A31 /* ARAlert-Prefix.pch */,
 				E9A9EC5616A7773100144A31 /* Default.png */,
 				E9A9EC5816A7773100144A31 /* Default@2x.png */,
 				E9A9EC5A16A7773100144A31 /* Default-568h@2x.png */,
@@ -184,9 +185,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E73232E018B5E6BA00845042 /* Example Tests */ = {
+		E73232E018B5E6BA00845042 /* ARAlert Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E73232F118B5E6BA00845042 /* Build configuration list for PBXNativeTarget "Example Tests" */;
+			buildConfigurationList = E73232F118B5E6BA00845042 /* Build configuration list for PBXNativeTarget "ARAlert Tests" */;
 			buildPhases = (
 				E73232DD18B5E6BA00845042 /* Sources */,
 				E73232DE18B5E6BA00845042 /* Frameworks */,
@@ -197,14 +198,14 @@
 			dependencies = (
 				E73232F018B5E6BA00845042 /* PBXTargetDependency */,
 			);
-			name = "Example Tests";
+			name = "ARAlert Tests";
 			productName = "Example Tests";
-			productReference = E73232E118B5E6BA00845042 /* Example Tests.xctest */;
+			productReference = E73232E118B5E6BA00845042 /* ARAlert Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E9A9EC3F16A7773100144A31 /* Example */ = {
+		E9A9EC3F16A7773100144A31 /* ARAlert */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E9A9EC6416A7773100144A31 /* Build configuration list for PBXNativeTarget "Example" */;
+			buildConfigurationList = E9A9EC6416A7773100144A31 /* Build configuration list for PBXNativeTarget "ARAlert" */;
 			buildPhases = (
 				E9A9EC3C16A7773100144A31 /* Sources */,
 				E9A9EC3D16A7773100144A31 /* Frameworks */,
@@ -214,9 +215,9 @@
 			);
 			dependencies = (
 			);
-			name = Example;
+			name = ARAlert;
 			productName = Example;
-			productReference = E9A9EC4016A7773100144A31 /* Example.app */;
+			productReference = E9A9EC4016A7773100144A31 /* ARAlert.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -232,9 +233,12 @@
 					E73232E018B5E6BA00845042 = {
 						TestTargetID = E9A9EC3F16A7773100144A31;
 					};
+					E9A9EC3F16A7773100144A31 = {
+						DevelopmentTeam = G4YQV39JLD;
+					};
 				};
 			};
-			buildConfigurationList = E9A9EC3A16A7773100144A31 /* Build configuration list for PBXProject "Example" */;
+			buildConfigurationList = E9A9EC3A16A7773100144A31 /* Build configuration list for PBXProject "ARAlert" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -246,8 +250,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E9A9EC3F16A7773100144A31 /* Example */,
-				E73232E018B5E6BA00845042 /* Example Tests */,
+				E9A9EC3F16A7773100144A31 /* ARAlert */,
+				E73232E018B5E6BA00845042 /* ARAlert Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -267,6 +271,7 @@
 			files = (
 				E9A9EC4F16A7773100144A31 /* InfoPlist.strings in Resources */,
 				E9A9EC5716A7773100144A31 /* Default.png in Resources */,
+				E7E0E00A18C2DE82002D7BFA /* ARAlert-Info.plist in Resources */,
 				E9A9EC5916A7773100144A31 /* Default@2x.png in Resources */,
 				E9A9EC5B16A7773100144A31 /* Default-568h@2x.png in Resources */,
 				E9A9EC5E16A7773100144A31 /* MainStoryboard.storyboard in Resources */,
@@ -300,7 +305,7 @@
 /* Begin PBXTargetDependency section */
 		E73232F018B5E6BA00845042 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E9A9EC3F16A7773100144A31 /* Example */;
+			target = E9A9EC3F16A7773100144A31 /* ARAlert */;
 			targetProxy = E73232EF18B5E6BA00845042 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -351,7 +356,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Example Tests/Example Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "Example Tests/ARAlert Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -360,9 +365,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "Example Tests/Example Tests-Info.plist";
+				INFOPLIST_FILE = "Example Tests/ARAlert Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ARAlert Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -387,14 +392,14 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Example Tests/Example Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "Example Tests/ARAlert Tests-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "Example Tests/Example Tests-Info.plist";
+				INFOPLIST_FILE = "Example Tests/ARAlert Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ARAlert Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -453,11 +458,14 @@
 		E9A9EC6516A7773100144A31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Example/Example-Prefix.pch";
-				INFOPLIST_FILE = "Example/Example-Info.plist";
+				GCC_PREFIX_HEADER = "Example/ARAlert-Prefix.pch";
+				INFOPLIST_FILE = "Example/ARAlert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ARAlert;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -465,11 +473,14 @@
 		E9A9EC6616A7773100144A31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Example/Example-Prefix.pch";
-				INFOPLIST_FILE = "Example/Example-Info.plist";
+				GCC_PREFIX_HEADER = "Example/ARAlert-Prefix.pch";
+				INFOPLIST_FILE = "Example/ARAlert-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ARAlert;
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -477,7 +488,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E73232F118B5E6BA00845042 /* Build configuration list for PBXNativeTarget "Example Tests" */ = {
+		E73232F118B5E6BA00845042 /* Build configuration list for PBXNativeTarget "ARAlert Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E73232F218B5E6BA00845042 /* Debug */,
@@ -486,7 +497,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E9A9EC3A16A7773100144A31 /* Build configuration list for PBXProject "Example" */ = {
+		E9A9EC3A16A7773100144A31 /* Build configuration list for PBXProject "ARAlert" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9A9EC6216A7773100144A31 /* Debug */,
@@ -495,7 +506,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E9A9EC6416A7773100144A31 /* Build configuration list for PBXNativeTarget "Example" */ = {
+		E9A9EC6416A7773100144A31 /* Build configuration list for PBXNativeTarget "ARAlert" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9A9EC6516A7773100144A31 /* Debug */,
