@@ -310,7 +310,9 @@ static CGFloat CRGetScreenWidth() {
 }
 
 - (BOOL)hasRoundedCorners {
-    return [_options[kARAlertRoundedCornersKey] boolValue] ?: kARRoundedCornersDefault;
+    return _options[kARAlertRoundedCornersKey] ?
+            [_options[kARAlertRoundedCornersKey] boolValue] :
+            kARRoundedCornersDefault;
 }
 
 - (CGFloat)cornerRadius {
@@ -334,6 +336,16 @@ static CGFloat CRGetScreenWidth() {
     return _options[kARAlertButtonsKey] ?: kARButtonsDefault;
 }
 
+- (NSTimeInterval)animateInTimeInterval {
+    return _options[kARAlertAnimationInTimeIntervalKey] ?
+    [_options[kARAlertAnimationInTimeIntervalKey] doubleValue] :
+    kARAnimateInTimeIntervalDefault;
+}
+- (NSTimeInterval)animateOutTimeInterval {
+    return _options[kARAlertAnimationOutTimeIntervalKey] ?
+    [_options[kARAlertAnimationOutTimeIntervalKey] doubleValue] :
+    kARAnimateOutTimeIntervalDefault;
+}
 
 
 - (void)displayAlert:(ARAlert*)alert {
@@ -368,7 +380,7 @@ static CGFloat CRGetScreenWidth() {
 {
     view.alpha = 0.0;
     view.transform = CGAffineTransformMakeScale(0.8, 0.8);
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:self.animateInTimeInterval * 0.6
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -378,7 +390,7 @@ static CGFloat CRGetScreenWidth() {
                          
                      }
                      completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.2
+                         [UIView animateWithDuration:self.animateInTimeInterval * 0.4
                                                delay:0.0
                                              options:UIViewAnimationOptionBeginFromCurrentState
                                           animations:^{
@@ -394,14 +406,14 @@ static CGFloat CRGetScreenWidth() {
 
 -(void)animatePopOut:(UIView *)view withCompletion:(void(^)(BOOL))completion
 {
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:self.animateOutTimeInterval * 0.6f
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.05, 1.05);
                      }
                      completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.2
+                         [UIView animateWithDuration:self.animateOutTimeInterval * 0.4f
                                                delay:0.0
                                              options:UIViewAnimationOptionBeginFromCurrentState
                                           animations:^{
@@ -415,7 +427,7 @@ static CGFloat CRGetScreenWidth() {
 -(void)animateSpringIn:(UIView *)view
 {
     view.transform = CGAffineTransformMakeTranslation(0-view.frame.size.width, 0);
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:self.animateInTimeInterval
                           delay:0
          usingSpringWithDamping:kARSpringDampingDefault
           initialSpringVelocity:kARSpringInitialVelocityDefault
@@ -431,7 +443,7 @@ static CGFloat CRGetScreenWidth() {
 
 -(void)animateSpringOut:(UIView *)view withCompletion:(void(^)(BOOL))completion
 {
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:self.animateOutTimeInterval
                           delay:0
          usingSpringWithDamping:kARSpringDampingDefault
           initialSpringVelocity:kARSpringInitialVelocityDefault
@@ -446,7 +458,7 @@ static CGFloat CRGetScreenWidth() {
 {
     view.alpha = 0.0;
     
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:self.animateInTimeInterval
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -462,7 +474,7 @@ static CGFloat CRGetScreenWidth() {
 -(void)animateFadeOut:(UIView*)view withCompletion:(void(^)(BOOL))completion
 {
     
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:self.animateOutTimeInterval
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -538,16 +550,14 @@ static CGFloat                  	kARButtonWidthFull                      = 1.0;
 static CGFloat                  	kARButtonHeight                         = 44.0;
 
 
-@interface ARAlertView ()
-@property (nonatomic, strong) UILabel *label;
-@property (nonatomic, strong) UILabel *subtitleLabel;
-@property (nonatomic, strong) UIView *buttonView;
-@property (nonatomic, strong) UIView *contentView;
-@end
 
 
 @implementation ARAlertView{
     BOOL _buttonRowCompleted;
+    UILabel *_label;
+    UILabel *_subtitleLabel;
+    UIView *_buttonView;
+    UIView *_contentView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -555,24 +565,24 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
     if (self) {
         self.userInteractionEnabled = YES;
         UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
-        self.contentView = contentView;
+        _contentView = contentView;
         contentView.userInteractionEnabled = YES;
         [self addSubview:contentView];
 
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         [contentView addSubview:label];
-        self.label = label;
+        _label = label;
         
         UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [contentView addSubview:subtitleLabel];
-        self.subtitleLabel = subtitleLabel;
+        _subtitleLabel = subtitleLabel;
         
         UIView *buttonView = [[UILabel alloc] initWithFrame:CGRectZero];
         buttonView.userInteractionEnabled = YES;
         [contentView addSubview:buttonView];
         buttonView.backgroundColor = [UIColor blackColor];
-        self.buttonView = buttonView;
+        _buttonView = buttonView;
     }
     return self;
 }
@@ -603,12 +613,12 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
 {
     CGFloat subtitleHeight = [self getTextHeightForWidth:bounds.size.width forText:self.alert.subtitleText withFont:self.alert.subtitleFont];
     
-    self.label.frame = CGRectMake(0,
+    _label.frame = CGRectMake(0,
                                   0,
                                   bounds.size.width,
                                   height);
     
-    self.subtitleLabel.frame = CGRectMake(0,
+    _subtitleLabel.frame = CGRectMake(0,
                                           height,
                                           bounds.size.width,
                                           subtitleHeight);
@@ -625,7 +635,7 @@ static CGFloat                  	kARButtonHeight                         = 44.0;
 
 -(void)updateLayoutWithOutSubtitleInBounds:(CGRect)bounds withTextHeight:(CGFloat)height
 {
-    self.label.frame = CGRectMake(0,
+    _label.frame = CGRectMake(0,
                                   0,
                                   bounds.size.width,
                                   height);

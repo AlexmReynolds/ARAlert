@@ -6,20 +6,23 @@
 //  Copyright (c) 2013 Alex Reynolds. All rights reserved.
 //
 
-#import "testingViewController.h"
+#import "RootViewController.h"
 #import "AppDelegate.h"
 
-@interface testingViewController (){
+@interface RootViewController (){
     
     __weak IBOutlet UISegmentedControl *animationOutType;
     __weak IBOutlet UISegmentedControl *animationInType;
     __weak IBOutlet UITextField *titleText;
     __weak IBOutlet UITextField *subTitleText;
+    __weak IBOutlet UISwitch *roundedCorners;
+    __weak IBOutlet UISlider *animationTime;
+    __weak IBOutlet UILabel *durationLabel;
 }
 
 @end
 
-@implementation testingViewController
+@implementation RootViewController
 
 - (void)viewDidLoad
 {
@@ -48,7 +51,10 @@
                                 @{kARAlertButtonTextKey : @"Hello"}
                                 ],
                               kARAlertAnimationInTypeKey : [self getInAnimation],
-                              kARAlertAnimationOutTypeKey : [self getOutAnimation]
+                              kARAlertAnimationOutTypeKey : [self getOutAnimation],
+                              kARAlertRoundedCornersKey : @(roundedCorners.on),
+                              kARAlertAnimationInTimeIntervalKey : @(animationTime.value),
+                              kARAlertAnimationOutTimeIntervalKey : @(animationTime.value)
                               };
     // Init our Hermes Messenger
     _arAlert = [ARAlert showAlertWithOptions:options completionBlock:^{
@@ -97,6 +103,9 @@
         default:
             break;
     }
+}
+- (IBAction)durationChanged:(UISlider *)slider {
+    durationLabel.text = [NSString stringWithFormat:@"%.2f", slider.value];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
